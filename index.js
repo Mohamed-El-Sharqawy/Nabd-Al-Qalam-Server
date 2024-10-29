@@ -15,23 +15,23 @@ require("dotenv").config();
 // Initialize App and Listen to the PORT
 const app = express();
 
-// Cors
-const whitelist = [
-  "https://nabdalqalam.com",
-  "localhost:5173",
-];
-const corsConfigs = {
-  origin: (origin, callback) => {
-    if (whitelist.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-  methods: ["GET", "POST", "OPTIONS"],
-};
+// // Cors
+// const whitelist = [
+//   "https://nabdalqalam.com",
+//   "localhost:5173",
+// ];
+// const corsConfigs = {
+//   origin: (origin, callback) => {
+//     if (whitelist.indexOf(origin) !== -1) {
+//       callback(null, true);
+//     } else {
+//       callback(new Error("Not allowed by CORS"));
+//     }
+//   },
+//   methods: ["GET", "POST", "OPTIONS"],
+// };
 
-app.use(cors(corsConfigs));
+app.use(cors());
 
 // Static Files, Logs and Middlewares
 app.use(express.static("public"));
