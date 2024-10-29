@@ -9,16 +9,14 @@ const usersRouter = require("./routes/users.routes");
 const stripeRouter = require("./routes/checkout.routes");
 const cors = require("cors");
 const { connectToDB } = require("./utils/db");
-const Order = require("./models/orders.model");
 require("dotenv").config();
+// const Order = require("./models/orders.model");
 
 // Initialize App and Listen to the PORT
 const app = express();
 
 // Cors
 const whitelist = [
-  "https://nabd-al-qalam.vercel.app",
-  "http://localhost:5173",
   "https://nabdalqalam.com",
 ];
 const corsConfigs = {
@@ -32,7 +30,7 @@ const corsConfigs = {
   methods: ["GET", "POST", "OPTIONS"],
 };
 
-app.use(cors());
+app.use(cors(corsConfigs));
 
 // Static Files, Logs and Middlewares
 app.use(express.static("public"));
@@ -53,55 +51,54 @@ try {
   console.error("Server Connection Failed", error);
 }
 
-app.post("/paymentt-checkout", async (req, res) => {
-  let order = await Order.create({
-    orderTitle: `${req.body.checkoutDetails.requestId} ${req.body.checkoutDetails.orderId}`,
-    orderTotalPrice: req.body.checkoutDetails.amount
-  });
-  order = await order.save();
+// app.post("/paymentt-checkout", async (req, res) => {
+//   let order = await Order.create({
+//     orderTitle: `${req.body.checkoutDetails.requestId} ${req.body.checkoutDetails.orderId}`,
+//     orderTotalPrice: req.body.checkoutDetails.amount
+//   });
+//   order = await order.save();
 
-  console.log(order);
+//   const body = req.body;
+//   body.checkoutDetails.orderId = order._id;
+//   body.checkoutDetails.requestId = order._id;
 
-  const body = req.body;
-  body.checkoutDetails.orderId = order._id;
-  body.checkoutDetails.requestId = order._id;
+//   const response = await fetch(
+//     "https://api.test.paymennt.com/mer/v2.0/payment/debit",
+//     {
+//       method: "POST",
+//       headers: {
+//         "Content-Type": "application/json",
+//         "X-Paymennt-Api-Key": "18d545c4bb995080",
+//         "X-Paymennt-Api-Secret":
+//           "mer_18d09da3ed1fa21b933cb6fee103f21f92df1a1b24fef31ea408ddabcc7283dd",
+//       },
+//       body: JSON.stringify(req.body),
+//     }
+//   );
 
-  const response = await fetch(
-    "https://api.test.paymennt.com/mer/v2.0/payment/debit",
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "X-Paymennt-Api-Key": "18d545c4bb995080",
-        "X-Paymennt-Api-Secret":
-          "mer_18d09da3ed1fa21b933cb6fee103f21f92df1a1b24fef31ea408ddabcc7283dd",
-      },
-      body: JSON.stringify(req.body),
-    }
-  );
+//   const data = await response.json();
+//   res.json(data);
+// });
+// app.get("/get-payment/:id", async (req, res) => {
+//   const {id} = req.query;
 
-  const data = await response.json();
-  res.json(data);
-});
-app.get("/get-payment/:id", async (req, res) => {
-  const {id} = req.query;
+//   const response = await fetch(
+//     `https://api.test.paymennt.com/mer/v2.0/payment/${id ?? "1797898212052478345"}`,
+//     {
+//       method: "GET",
+//       headers: {
+//         "Content-Type": "application/json",
+//         "X-Paymennt-Api-Key": "18d545c4bb995080", 
+//         "X-Paymennt-Api-Secret":
+//           "mer_18d09da3ed1fa21b933cb6fee103f21f92df1a1b24fef31ea408ddabcc7283dd",
+//       },
+//       }
+//   );
 
-  const response = await fetch(
-    `https://api.test.paymennt.com/mer/v2.0/payment/${id ?? "1797898212052478345"}`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "X-Paymennt-Api-Key": "18d545c4bb995080", 
-        "X-Paymennt-Api-Secret":
-          "mer_18d09da3ed1fa21b933cb6fee103f21f92df1a1b24fef31ea408ddabcc7283dd",
-      },
-      }
-  );
+//   const data = await response.json();
+//   res.json(data);
+// });
 
-  const data = await response.json();
-  res.json(data);
-});
 app.use("/", routes);
 app.use("/", authRouter);
 app.use("/", usersRouter);
