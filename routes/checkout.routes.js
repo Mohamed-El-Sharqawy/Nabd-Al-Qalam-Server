@@ -3,7 +3,7 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const express = require("express");
 const router = express.Router();
 
-export function calculateTotalPriceWithTax(cartTotalPrice) {
+function calculateTotalPriceWithTax(cartTotalPrice) {
   // Define the tax rate
   const taxRate = 1.5 / 100; // 1.5%
 
