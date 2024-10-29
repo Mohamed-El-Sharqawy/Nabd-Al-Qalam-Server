@@ -18,6 +18,7 @@ const app = express();
 // Cors
 const whitelist = [
   "https://nabdalqalam.com",
+  "localhost:5173",
 ];
 const corsConfigs = {
   origin: (origin, callback) => {
