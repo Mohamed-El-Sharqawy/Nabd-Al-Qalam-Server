@@ -31,7 +31,7 @@ router.post("/create-checkout-session", async (req, res) => {
         shipping_rate_data: {
           type: "fixed_amount",
           fixed_amount: {
-            amount: 10 * 100,
+            amount: 25 * 100,
             currency: "aed",
           },
           display_name: "Shipping",
