@@ -1,6 +1,9 @@
 require("dotenv").config();
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const express = require("express");
+const {
+  calculateTotalPriceWithTax,
+} = require("../utils/calculateTotalPriceWithTax");
 const router = express.Router();
 
 router.post("/create-checkout-session", async (req, res) => {
@@ -16,7 +19,7 @@ router.post("/create-checkout-session", async (req, res) => {
             id: book?._id,
           },
         },
-        unit_amount: +book.price * 100,
+        unit_amount: calculateTotalPriceWithTax(+book.price) * 100,
       },
       quantity: book.quantity,
     };
