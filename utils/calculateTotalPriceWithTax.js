@@ -1,4 +1,4 @@
-export function calculateTotalPriceWithTax(cartTotalPrice) {
+function calculateTotalPriceWithTax(cartTotalPrice) {
   // Define the tax rate
   const taxRate = 5 / 100; // 5%
 
@@ -19,3 +19,5 @@ export function calculateTotalPriceWithTax(cartTotalPrice) {
   // Return the total price
   return totalPrice;
 }
+
+module.exports = { calculateTotalPriceWithTax };

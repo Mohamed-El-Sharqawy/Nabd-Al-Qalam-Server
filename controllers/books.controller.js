@@ -9,7 +9,11 @@ const books_index = (req, res) => {
       res.json(result);
     })
     .catch(() => {
-      res.status(400).send("Please Try Again Later <a href='https://nabdalqalam.com'>Click Here</a>");
+      res
+        .status(400)
+        .send(
+          "Please Try Again Later <a href='https://nabdalqalam.com'>Click Here</a>"
+        );
     });
 };
 
@@ -29,7 +33,39 @@ const books_add = async (req, res) => {
   }
 };
 
+const books_edit = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updates = req.body;
+
+    // If there's a new image, upload it
+    if (updates.img && updates.img.startsWith("https://res.cloudinary.com")) {
+      const uploadedResponse = await cloudinary.uploader.upload(updates.img, {
+        upload_preset: "nabdu_al_qalam",
+      });
+      updates.img = uploadedResponse?.url;
+    }
+
+    const updatedBook = await Book.findByIdAndUpdate(
+      id,
+      { $set: updates },
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedBook) {
+      return res.status(404).json({ message: "Book not found" });
+    }
+
+    res
+      .status(200)
+      .json({ message: "Book updated successfully", book: updatedBook });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
 module.exports = {
   books_index,
   books_add,
+  books_edit,
 };
