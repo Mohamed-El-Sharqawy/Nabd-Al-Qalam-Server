@@ -13,7 +13,7 @@ router.post("/create-checkout-session", async (req, res) => {
         currency: "aed",
         product_data: {
           name: book?.arTitle,
-          images: [book?.img],
+          // images: [book?.img],
           description: book?.arDescription,
           metadata: {
             id: book?._id,
